@@ -23,4 +23,6 @@ cv::Mat applyLut(const cv::Mat *image, const cv::Mat lookUpTable);
 
 cv::Mat applyLut(const cv::Mat *image, const cv::Mat lutOne, const cv::Mat lutTwo);
 
+cv::Mat fillTheHoles(const cv::Mat *image, unsigned char threshold = 1);
+
 #endif /* INCLUDES_H_ */

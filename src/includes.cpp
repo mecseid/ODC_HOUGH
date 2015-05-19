@@ -57,3 +57,47 @@ cv::Mat applyLut(const cv::Mat *image, const cv::Mat lutOne, const cv::Mat lutTw
 	dst = applyLut(image, lutTwo);
 	return dst;
 }
+
+cv::Mat fillTheHoles(const cv::Mat *image, unsigned char threshold)
+{
+	cv::Mat imageThresh;
+	cv::threshold(*image, imageThresh, threshold, 255, cv::THRESH_BINARY);
+	// Loop through the border pixels and if they're black, floodFill from there
+	cv::Mat mask = imageThresh.clone();
+	for (int i = 0; i < mask.cols; i++)
+	{
+		if (mask.at<unsigned char>(0, i) == 0)
+		{
+			cv::floodFill(mask, cv::Point(i, 0), 255, 0, 10, 10);
+		}
+		if (mask.at<unsigned char>(mask.rows - 1, i) == 0)
+		{
+			cv::floodFill(mask, cv::Point(i, mask.rows - 1), 255, 0, 10, 10);
+		}
+	}
+	for (int i = 0; i < mask.rows; i++)
+	{
+		if (mask.at<unsigned char>(i, 0) == 0)
+		{
+			cv::floodFill(mask, cv::Point(0, i), 255, 0, 10, 10);
+		}
+		if (mask.at<unsigned char>(i, mask.cols - 1) == 0)
+		{
+			cv::floodFill(mask, cv::Point(mask.cols - 1, i), 255, 0, 10, 10);
+		}
+	}
+
+	// Compare mask with original.
+	cv::Mat newImage = image->clone();
+	for (int row = 0; row < mask.rows; ++row)
+	{
+		for (int col = 0; col < mask.cols; ++col)
+		{
+			if (mask.at<char>(row, col) == 0)
+			{
+				newImage.at<char>(row, col) = 255;
+			}
+		}
+	}
+	return newImage;
+}

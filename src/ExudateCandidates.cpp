@@ -43,19 +43,5 @@ cv::Mat exudateCandidates(const cv::Mat *image, int structOne, int structTwo, do
 	// A képen található "lyukak" elsimítása
 	// Vissza unsigned char-ra
 	bwEdge.convertTo(bwEdge, CV_8UC1, 1);
-	cv::Mat res;
-	cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-	cv::morphologyEx(bwEdge, res, cv::MORPH_OPEN, kernel);
-	/*
-	 cv::Mat inv;
-	 cv::bitwise_not( bwEdge, inv );
-	 std::vector<std::vector<cv::Point>> contours;
-	 cv::findContours( inv, contours, cv::RETR_CCOMP, cv::CHAIN_APPROX_SIMPLE );
-	 for( std::vector<cv::Point> contour : contours ) {
-	 cv::drawContours( inv, contour, 0, 255, -1 );
-	 }
-	 cv::Mat res;
-	 cv::bitwise_not( inv, res );
-	 */
-	return res;
+	return fillTheHoles(&bwEdge);
 }
