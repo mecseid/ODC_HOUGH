@@ -3,6 +3,8 @@
 
 #include "includes.h"
 
+cv::Mat getSkeleton(const cv::Mat *image);
+
 cv::Mat vesselSceleton(const cv::Mat *vessel);
 
 #endif /* VESSELSCELETON_H_ */
